@@ -1,0 +1,86 @@
+*, ::before, ::after{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    display: grid;
+    min-height: 100vh;
+    grid-template-rows: auto 1fr auto;
+}
+header{
+    grid-column: 1/2;
+    background-color: cadetblue;
+    text-align: center;
+    padding: 1rem;
+}
+nav{
+    grid-column: 1/2;
+    background-color: aquamarine;
+    position: relative;
+    padding: 0.5rem;
+    list-style: none;
+}
+nav ul{
+    position: sticky;
+    top: 20px;
+}
+main{
+    background-color: beige;
+}
+main.includeNav{
+    display: grid;
+    grid-template-columns: 100px 1fr;
+}
+main.includeNav nav{
+    grid-row: 1/-1;
+}
+footer{
+    background-color: rgb(163, 182, 131);
+    text-align: center;
+    padding: 1rem;
+}
+footer a{
+    font-size: 2rem;
+}
+p{
+    /* margin: 5rem auto; */
+    width: 80vw;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: clamp(1rem, 1vh, 3rem);
+}
+.error{
+    color: red;
+}
+.formError{
+    border-color: red;
+}
+form{
+    width: 75vw;
+    margin: 1rem auto;
+}
+.container{
+    width: 80vw;
+    display: flex;
+    margin: 10px;
+    justify-content: center;
+}
+.container>div{
+    margin: 25px;
+    width: auto;
+    border: 1px solid black;
+    padding: 50px;
+}
+div>h3{
+    padding-top: 25px;
+    padding-left:-20px;
+}div>ul{
+    list-style: none;
+}
+h1{
+    padding-top: 50px;
+    text-align: center;
+}
