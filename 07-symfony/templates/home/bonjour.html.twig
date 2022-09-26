@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+{% block header %}{{ nom ~" "~prenom}}{% endblock %}
+{% block body %}
+<a href="{{ path('bonjour', {nom: "Jean", prenom: "Fontaine"}) }}">Jean Fontaine</a><br>
+<a href="{{ path('bonjour', {nom: "inconnu", prenom: "Jean"}) }}">Inconnu Jean</a>
+<h3>ceci est le corps de mon body</h3>
+<img src="{{asset("./assets/images/identite.png")}}" alt="identite">
+{% endblock %}

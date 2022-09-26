@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+{# parent()permet de recuperer ce qui se trouve dans le block parent #}
+{% block title %}{{parent() }} - Accueil{% endblock %}
+
+{% block body %}
+{{controller_name}}
+
+<br>
+Salutations pour la France : {{pays.france }} 
+<br>
+ Et pour les Anglais : {{pays.angleterre}}
+<br>
+{{pays.france | reverse}}
+<hr>
+ Tirage aléatoire (Rand) entre 0 et 10  <strong>{{ chiffre }} </strong><br>
+<strong>
+    {% if chiffre >5%}
+        {{chiffre}} est plus grand que 5.
+    {% elseif chiffre < 5%}
+        {{chiffre}} est plus petit que 5.
+    {% else %}
+        Votre chiffre est 5.
+    {%endif%}
+</strong>
+<hr>
+
+<ul>
+    {% for f in fruits %}
+        <li>{{f}}</li>
+        {% endfor %}
+</ul>
+{% for v in vide %}
+    {{v}}
+{% else %}
+    Votre tableau est vide.
+{% endfor %}
+<hr>
+<em>Surface :</em>{{area( 12,87)}} m²
+<br>
+{{ 9986587455845 | price}} "commentaires : 
+<br>
+{{ 9986587455845 | price("$", false, ".",",")}}
+<br>
+{% endblock %}
