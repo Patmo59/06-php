@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail des Villes{% endblock %}
+{% block body %}
+    <h1>{{ville.nom |upper}}</h1>
+        <p>
+            {{ ville.nom}} a uune population de {{ville.population}} habitants.
+            <br>
+            Cette fiche a été crée le  {{ville.createdAt | date}}.
+            <br>
+            {% if ville.editedAt%}
+            Cette fiche a été editée le {{ville.editedAt | date}}
+            {% endif %}
+       </p>
+{% endblock %}

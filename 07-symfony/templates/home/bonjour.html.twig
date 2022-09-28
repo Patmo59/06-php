@@ -1,6 +1,24 @@
 {% extends 'base.html.twig' %}
 {% block header %}{{ nom ~" "~prenom}}{% endblock %}
 {% block body %}
+{# recupère tous les messages d'une catégories #}
+{% for message in app.flashes("bonjour") %}
+<div>{{message}}</div>
+    
+{% endfor %}
+    {#recupère tous les messages et lacatégories corresponsdante
+    s parmisd les categories donnéers en arguments}#}
+{#recupère toutes kles categories et tous les messages#}
+{% for categorie, messages in app.flashes(["hello", "redirection"]) %}
+    {% for message in messages %}
+        <div> 
+            <strong>{{categorie}} : </strong>
+            <br>
+            {{message}}
+        </div>
+    {% endfor %}
+{% endfor %}
+<h2>Déjà {{app.session.get("nbVisite")}} visites</h2>
 <a href="{{ path('bonjour', {nom: "Jean", prenom: "Fontaine"}) }}">Jean Fontaine</a><br>
 <a href="{{ path('bonjour', {nom: "inconnu", prenom: "Jean"}) }}">Inconnu Jean</a>
 <h3>ceci est le corps de mon body</h3>

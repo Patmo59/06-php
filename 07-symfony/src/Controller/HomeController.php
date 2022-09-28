@@ -25,17 +25,6 @@ class HomeController extends AbstractController
             "vide"=>[1]
         ]);
     }
-    #[Route('/bonjour/{nom<^[a-zA-Z]+$>}/{prenom<^[a-zA-Z]+$>?Jean}', name:'bonjour')]
-    public function bonjour($nom,$prenom, Request $request): Response
-    {
-        dump($request);
-        // dump($nom, $prenom);
-        // dd($nom, $prenom);
-        return $this ->render("home/bonjour.html.twig", [
-            "nom" =>$nom,
-            "prenom"=>$prenom
-        ]);
-    }
     #[Route('/bonjour/anglais/{username}', name:'hello',
     defaults:["username"=>"Charles"],
     requirements: ["username" => "^[a-zA-Z]+$"])]
@@ -43,9 +32,36 @@ class HomeController extends AbstractController
     public function hello($username): 
     RedirectResponse
     {
-        dd($username);
+        // dd($username);
+        $this ->addFlash("redirection","Vous avez été redirigé depuis la page anglais");  
         return $this ->redirectToRoute("bonjour", [
             "nom"=>"inconnu", "prenom"=> $username
         ]);
     }
+    #[Route('/bonjour/{nom<^[a-zA-Z]+$>}/{prenom<^[a-zA-Z]+$>?Jean}', name:'bonjour')]
+    public function bonjour($nom,$prenom, Request $request): Response
+    {
+        dump($request);
+        // dump($nom, $prenom);
+        // dd($nom, $prenom);
+
+
+        //getsession correspond au session start
+        $sess = $request ->getSession();
+        //has permet de verifier 'exitence
+        if($sess ->has("nbVisite"))
+        //get permet de recuperer
+            $nb = $sess ->get("nbVisite") +1;
+        else $nb = 1;
+        //set permet de parametrer
+        $sess ->set("nbVisite", $nb);
+        //remove permet de supprimler
+        //$sess -> remove("nbVisite)
+        $this ->addFlash("bonjour", "Bonjour $prenom $nom");
+        return $this ->render("home/bonjour.html.twig", [
+            "nom" =>$nom,
+            "prenom"=>$prenom
+        ]);
+    }
+    
 }
