@@ -3,12 +3,15 @@
 namespace App\Entity;
 
 use App\Repository\VilleRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Traits\TimeStampTrait;
 
 #[ORM\Entity(repositoryClass: VilleRepository::class)]
+#[ORM\HasLifecycleCallbacks()]
 class Ville
 {
+    use TimeStampTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -20,11 +23,14 @@ class Ville
     #[ORM\Column]
     private ?int $population = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $editedAt = null;
+
+    #[ORM\OneToOne(mappedBy: 'ChefLieu', cascade: ['persist', 'remove'])]
+    private ?Departement $ChefLieu = null;
+
+    #[ORM\ManyToOne(inversedBy: 'Villes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Departement $departement = null;
 
     public function getId(): ?int
     {
@@ -55,27 +61,34 @@ class Ville
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+
+    public function getChefLieu(): ?Departement
     {
-        return $this->createdAt;
+        return $this->ChefLieu;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setChefLieu(Departement $ChefLieu): self
     {
-        $this->createdAt = $createdAt;
+        // set the owning side of the relation if necessary
+        if ($ChefLieu->getChefLieu() !== $this) {
+            $ChefLieu->setChefLieu($this);
+        }
+
+        $this->ChefLieu = $ChefLieu;
 
         return $this;
     }
 
-    public function getEditedAt(): ?\DateTimeInterface
+    public function getDepartement(): ?Departement
     {
-        return $this->editedAt;
+        return $this->departement;
     }
 
-    public function setEditedAt(?\DateTimeInterface $editedAt): self
+    public function setDepartement(?Departement $departement): self
     {
-        $this->editedAt = $editedAt;
+        $this->departement = $departement;
 
         return $this;
     }
+
 }

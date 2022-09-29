@@ -38,7 +38,20 @@ class VilleRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-
+#@return Ville[] Returns an array of Ville objects
+    
+public function findByPopulationInterval(int $min, int $max): array
+{
+    return $this->createQueryBuilder('v')
+        ->andWhere('v.population between :min and :max')
+        ->setParameter('min', $min)
+        ->setParameter('max', $max)
+    // fl setParameters(["min"=>$min, "max" => $max])
+        ->orderBy('v.population', 'ASC')
+        ->setMaxResults(10)
+        ->getQuery()
+        ->getResult()
+    ;
 //    /**
 //     * @return Ville[] Returns an array of Ville objects
 //     */
@@ -63,4 +76,5 @@ class VilleRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+}
 }
