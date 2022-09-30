@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Ville;
 use App\Form\VilleType;
+use App\Service\Mailer;
+use App\Service\Uploader;
 use App\Repository\VilleRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,19 +17,27 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route("/ville")]
 class VilleController extends AbstractController
 {
+    public function __construct(private Uploader $uploader){}
     #[Route('/add', name: 'addVille')]
-    public function create(ManagerRegistry $doc, Request $request): Response
+    public function create(ManagerRegistry $doc, Request $request, Mailer $mailer): Response
     {
         $ville = new Ville();
         $form = $this ->createForm(VilleType::class, $ville);
         // $form ->remove("createdAt");
         $form ->handleRequest($request);
-        if($form ->isSubmitted())
+        if($form ->isSubmitted() && $form -> isValid())
         {
+            $photo = $form ->get("photoFile") ->getData();
+            if($photo)
+            {
+                $dir = $this ->getParameter("ville_directory");
+                $ville ->setPhoto($this ->uploader ->uploadFile($photo, $dir));
+            }
             // dump($ville);
             $em =$doc ->getManager();
             $em ->persist($ville);
             $em ->flush();
+            $mailer ->sendEmail(content:" Une nouvelle vile est créee");
 
             $this -> addFlash("success", "Une nouvelle ville a été ajoutée");
             return $this ->redirectToRoute("readVille");
@@ -52,7 +62,11 @@ class VilleController extends AbstractController
     public function detail(ville $ville=null):Response
     {
         if(!$ville) return $this ->redirectToRoute("readville");
-        return $this ->render("ville/detail.html.twig", ["ville"=> $ville]);
+        return $this ->render("ville/detail.html.twig", 
+        [
+            "ville"=> $ville,
+            "dirImage"=>$this ->getParameter("ville_directory")
+        ]);
     }
     #[Route("/delete/{id<\d+>}", name:"deleteVille")]
 public function delete(Ville $ville=null, ManagerRegistry $doc):Response

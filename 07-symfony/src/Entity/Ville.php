@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Traits\TimeStampTrait;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: VilleRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
@@ -18,9 +19,13 @@ class Ville
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message:" Veuillez renseigner ce champs")]
+    #[Assert\Length(min: 3, max:50)]
     private ?string $nom = null;
-
+    
     #[ORM\Column]
+    #[Assert\NotBlank(message:" Veuillez renseigner ce champ")]
+    #[Assert\Regex("/^\d+$/", "Veuillez n'entrez que chiffres")]
     private ?int $population = null;
 
 
@@ -31,6 +36,9 @@ class Ville
     #[ORM\ManyToOne(inversedBy: 'Villes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Departement $departement = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photo = null;
 
     public function getId(): ?int
     {
@@ -89,6 +97,22 @@ class Ville
         $this->departement = $departement;
 
         return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): self
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+    public function __toString()
+    {
+        return $this ->nom;
     }
 
 }

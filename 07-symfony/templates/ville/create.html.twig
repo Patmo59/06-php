@@ -2,7 +2,7 @@
 {% block title %}Créer une nouvelle ville{% endblock %}
 {% block body %}
 {# {{form(villeForm)}} #}
-{{form_start(villeForm)}}
+{{form_start(villeForm, {"attr":{"novalidate":"novalidate"}})}}
 <div class="row">
     <div class="col">{{form_row(villeForm.nom)}}</div>
     <div class="col">{{form_row(villeForm.population)}}</div>
